@@ -1,0 +1,14 @@
+---
+import HomeRanking from '@/components/home/HomeRanking.astro';
+import type { Post } from '@/lib/posts';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<aside class="home-sidebar" aria-label="サイドバー">
+  <HomeRanking posts={posts} />
+</aside>

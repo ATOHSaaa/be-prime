@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import { fetchProductsByAsins } from '@/lib/creators-api';
+import { resolveProducts } from '@/lib/product-entries';
+import { getPublishedPosts } from '@/lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return Promise.all(
+    posts.map(async (post) => {
+      const { headings } = await render(post);
+      return {
+        params: { slug: post.id },
+        props: { post, headings },
+      };
+    }),
+  );
+}
+
+interface Props {
+  post: Awaited<ReturnType<typeof getCollection<'posts'>>>[number];
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { post, headings } = Astro.props;
+const { Content } = await render(post);
+const allPosts = await getPublishedPosts();
+
+const productEntries = post.data.products ?? [];
+const apiProducts =
+  productEntries.length > 0
+    ? await fetchProductsByAsins(productEntries.map((p) => p.asin))
+    : [];
+const amazonProducts = resolveProducts(productEntries, apiProducts);
+---
+
+<PostLayout
+  post={post}
+  allPosts={allPosts}
+  headings={headings}
+  amazonProducts={amazonProducts}
+  productEntries={productEntries}
+>
+  <Content />
+</PostLayout>

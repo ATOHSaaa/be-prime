@@ -1,0 +1,12 @@
+---
+interface Props {
+  /** 表示テキスト */
+  label: string;
+  /** sale = セール中, prime = Prime対象 */
+  variant?: 'sale' | 'prime';
+}
+
+const { label, variant = 'sale' } = Astro.props;
+---
+
+<span class={`sale-badge sale-badge--${variant}`}>{label}</span>

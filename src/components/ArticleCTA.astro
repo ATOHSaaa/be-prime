@@ -1,0 +1,46 @@
+---
+import { ctas, affiliate, type CtaId } from '@/config/site';
+import { affiliateUrl } from '@/lib/amazon';
+
+interface Props {
+  cta?: CtaId | 'none';
+}
+
+const { cta: ctaOverride } = Astro.props;
+
+function resolveCtaTypes(): CtaId[] {
+  if (ctaOverride === 'none') return [];
+  if (ctaOverride === 'prime-trial') return ['prime-trial'];
+  if (ctaOverride === 'prime-day') return ['prime-day'];
+  if (ctaOverride === 'sale-page') return ['sale-page'];
+  return ['sale-page'];
+}
+
+const ctaTypes = resolveCtaTypes();
+---
+
+{
+  ctaTypes.map((id) => {
+    const cta = ctas[id];
+    const url = affiliateUrl(cta.officialUrl);
+    return (
+      <aside class={`cta-box cta-box--${id}`} aria-label={`${cta.name}の紹介`}>
+        <div class="cta-box__head">
+          <span class="cta-box__label">{cta.shortName}</span>
+          <h2 class="cta-box__title">{cta.name}</h2>
+        </div>
+        <p class="cta-box__desc">{cta.description}</p>
+        <a
+          class="cta-box__button"
+          href={url}
+          rel="nofollow sponsored noopener"
+          target="_blank"
+        >
+          {cta.name}の公式ページを見る
+        </a>
+      </aside>
+    );
+  })
+}
+
+<p class="affiliate-notice">{affiliate.disclosure}</p>

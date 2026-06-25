@@ -1,0 +1,48 @@
+import type { CreatorsProduct } from './amazon';
+import { affiliateUrl, productUrl } from './amazon';
+import type { ProductEntry } from './product-entry';
+
+export type { ProductEntry } from './product-entry';
+
+const AMAZON_IMAGE_BASE =
+  'https://images-fe.ssl-images-amazon.com/images/P';
+
+/** ASIN から商品画像URL（API 未設定時のフォールバック） */
+export function amazonProductImageUrl(asin: string): string {
+  return `${AMAZON_IMAGE_BASE}/${asin}.09._SL500_.jpg`;
+}
+
+export function buildFallbackProduct(entry: ProductEntry): CreatorsProduct {
+  return {
+    asin: entry.asin,
+    title: entry.label ?? entry.asin,
+    detailPageUrl: productUrl(entry.asin),
+    imageUrl: amazonProductImageUrl(entry.asin),
+    price: entry.price,
+    savings: entry.savings,
+  };
+}
+
+/** frontmatter の products と API 結果をマージ（API 優先、欠損は手動値で補完） */
+export function resolveProducts(
+  entries: ProductEntry[],
+  apiProducts: CreatorsProduct[],
+): CreatorsProduct[] {
+  const apiByAsin = new Map(apiProducts.map((p) => [p.asin, p]));
+
+  return entries.map((entry) => {
+    const fallback = buildFallbackProduct(entry);
+    const api = apiByAsin.get(entry.asin);
+    if (!api) return fallback;
+
+    return {
+      ...fallback,
+      ...api,
+      title: api.title || fallback.title,
+      price: api.price ?? fallback.price,
+      savings: api.savings ?? fallback.savings,
+      imageUrl: api.imageUrl ?? fallback.imageUrl,
+      detailPageUrl: affiliateUrl(api.detailPageUrl),
+    };
+  });
+}

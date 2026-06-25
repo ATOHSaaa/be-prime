@@ -1,0 +1,33 @@
+---
+import Thumbnail from '@/components/Thumbnail.astro';
+import type { Post } from '@/lib/posts';
+import { formatDateCompact } from '@/lib/posts';
+import { categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const cat = categories[post.data.category as CategoryId];
+const productCount = post.data.products?.length ?? 0;
+---
+
+<a href={`/posts/${post.id}/`} class="home-card home-card--pick">
+  <div class="home-card__thumb-wrap">
+    <Thumbnail post={post} ratio="16 / 10" showTitle={false} />
+    {productCount > 0 && (
+      <span class="home-card__badge">おすすめ {productCount}点</span>
+    )}
+  </div>
+  <div class="home-card__body">
+    <span class={`category-badge category-badge--${post.data.category}`}>
+      {cat.shortName}
+    </span>
+    <h3 class="home-card__title">{post.data.title}</h3>
+    <time class="home-card__date" datetime={post.data.pubDate.toISOString()}>
+      {formatDateCompact(post.data.pubDate)}
+    </time>
+  </div>
+</a>

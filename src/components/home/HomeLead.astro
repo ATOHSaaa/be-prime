@@ -1,0 +1,66 @@
+---
+import Thumbnail from '@/components/Thumbnail.astro';
+import type { Post } from '@/lib/posts';
+import { formatDateCompact } from '@/lib/posts';
+import { categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+const [hero, ...rest] = posts;
+const side = rest.slice(0, 4);
+---
+
+{
+  hero && (
+    <section class="home-hero" aria-label="注目記事">
+      <a href={`/posts/${hero.id}/`} class="hero-main">
+        <Thumbnail post={hero} ratio="16 / 9" />
+        <div class="hero-main__body">
+          <span
+            class={`category-badge category-badge--${hero.data.category}`}
+          >
+            {categories[hero.data.category as CategoryId].shortName}
+          </span>
+          <h2 class="hero-main__title">{hero.data.title}</h2>
+          <p class="hero-main__desc">{hero.data.description}</p>
+          <time
+            class="hero-main__date"
+            datetime={hero.data.pubDate.toISOString()}
+          >
+            {formatDateCompact(hero.data.pubDate)}
+          </time>
+        </div>
+      </a>
+
+      {side.length > 0 && (
+        <ul class="hero-side">
+          {side.map((post) => (
+            <li>
+              <a href={`/posts/${post.id}/`} class="hero-side__link">
+                <Thumbnail post={post} ratio="16 / 10" showTitle={false} />
+                <div class="hero-side__body">
+                  <span
+                    class={`category-badge category-badge--${post.data.category}`}
+                  >
+                    {categories[post.data.category as CategoryId].shortName}
+                  </span>
+                  <h3 class="hero-side__title">{post.data.title}</h3>
+                  <time
+                    class="hero-side__date"
+                    datetime={post.data.pubDate.toISOString()}
+                  >
+                    {formatDateCompact(post.data.pubDate)}
+                  </time>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}

@@ -1,0 +1,12 @@
+---
+import HomeRanking from '@/components/home/HomeRanking.astro';
+import { getPublishedPosts } from '@/lib/posts';
+
+const posts = await getPublishedPosts();
+---
+
+<aside class="sidebar" aria-label="サイドバー">
+  <div class="sidebar__inner">
+    <HomeRanking posts={posts} />
+  </div>
+</aside>

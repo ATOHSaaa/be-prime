@@ -1,0 +1,101 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HomeLead from '@/components/home/HomeLead.astro';
+import HomeSection from '@/components/home/HomeSection.astro';
+import HomeTeaser from '@/components/home/HomeTeaser.astro';
+import HomePickCard from '@/components/home/HomePickCard.astro';
+import HomeDigest from '@/components/home/HomeDigest.astro';
+import CategoryTags from '@/components/home/CategoryTags.astro';
+import HomeSidebar from '@/components/home/HomeSidebar.astro';
+import {
+  getPublishedPosts,
+  getActiveSalePosts,
+  getPostsWithProducts,
+  excludePosts,
+} from '@/lib/posts';
+import { site } from '@/config/site';
+
+const posts = await getPublishedPosts();
+const activeSales = await getActiveSalePosts();
+
+const leadPosts = posts.slice(0, 5);
+const usedIds = new Set(leadPosts.map((p) => p.id));
+
+const featurePool =
+  activeSales.length > 0
+    ? [...activeSales, ...excludePosts(posts, new Set(activeSales.map((p) => p.id)))]
+    : posts;
+const featurePosts = excludePosts(featurePool, usedIds).slice(0, 6);
+featurePosts.forEach((p) => usedIds.add(p.id));
+
+const pickPosts = getPostsWithProducts(posts).slice(0, 4);
+pickPosts.forEach((p) => usedIds.add(p.id));
+
+const digestPosts =
+  excludePosts(posts, usedIds).length > 0
+    ? excludePosts(posts, usedIds).slice(0, 5)
+    : posts.slice(0, 5);
+---
+
+<BaseLayout
+  title={site.name}
+  description={site.description}
+  pathname="/"
+  structuredData="WebSite"
+  layout="home"
+>
+  <div class="home-layout">
+    <div class="home-layout__main">
+      <HomeLead posts={leadPosts} />
+
+      <HomeSection
+        title="Feature"
+        subtitle="セール速報・特集"
+        moreHref="/posts/"
+        id="home-feature"
+      >
+        <ul class="home-feature-list">
+          {
+            featurePosts.map((post) => (
+              <li>
+                <HomeTeaser post={post} />
+              </li>
+            ))
+          }
+        </ul>
+      </HomeSection>
+
+      {
+        pickPosts.length > 0 && (
+          <HomeSection
+            title="Pick Up"
+            subtitle="おすすめ商品付き記事"
+            moreHref="/posts/"
+            id="home-pickup"
+          >
+            <ul class="home-pick-list">
+              {pickPosts.map((post) => (
+                <li>
+                  <HomePickCard post={post} />
+                </li>
+              ))}
+            </ul>
+          </HomeSection>
+        )
+      }
+
+      <CategoryTags />
+
+      <HomeSection
+        title="Digest"
+        subtitle="まとめて読む"
+        moreHref="/posts/"
+        id="home-digest"
+      >
+        <HomeDigest posts={digestPosts} />
+      </HomeSection>
+    </div>
+
+    <HomeSidebar posts={posts} />
+  </div>
+</BaseLayout>

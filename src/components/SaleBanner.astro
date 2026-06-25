@@ -1,0 +1,44 @@
+---
+import SectionHeading from '@/components/SectionHeading.astro';
+import type { Post } from '@/lib/posts';
+import { formatDate } from '@/lib/posts';
+import { categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section class="sale-banner" aria-label="開催中のセール">
+      <SectionHeading title="開催中のセール" subtitle="Active Sales" />
+      <ul class="sale-banner__list">
+        {posts.map((post) => {
+          const cat = categories[post.data.category as CategoryId];
+          return (
+            <li class="sale-banner__item">
+              <a href={`/posts/${post.id}/`} class="sale-banner__link">
+                <span class={`category-badge category-badge--${post.data.category}`}>
+                  {cat.shortName}
+                </span>
+                <span class="sale-banner__title">{post.data.title}</span>
+                {post.data.saleEndDate && (
+                  <time
+                    class="sale-banner__end"
+                    datetime={post.data.saleEndDate.toISOString()}
+                  >
+                    〜{formatDate(post.data.saleEndDate)}まで
+                  </time>
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )
+}

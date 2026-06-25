@@ -1,0 +1,33 @@
+---
+import { ctas, type CtaId } from '@/config/site';
+import { affiliateUrl } from '@/lib/amazon';
+
+const promoOrder: CtaId[] = ['sale-page', 'prime-trial'];
+---
+
+<nav class="sidebar-promos" aria-label="おすすめリンク">
+  <p class="sidebar-promos__heading">チェックする</p>
+  <ul class="sidebar-promos__list">
+    {
+      promoOrder.map((id) => {
+        const cta = ctas[id];
+        const url = affiliateUrl(cta.officialUrl);
+        return (
+          <li>
+            <a
+              class={`sidebar-promo sidebar-promo--${id}`}
+              href={url}
+              rel="nofollow sponsored noopener"
+              target="_blank"
+            >
+              <span class="sidebar-promo__label">{cta.shortName}</span>
+              <span class="sidebar-promo__title">{cta.name}</span>
+              <span class="sidebar-promo__desc">{cta.description}</span>
+              <span class="sidebar-promo__cta">公式ページを見る →</span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

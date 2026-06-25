@@ -1,0 +1,126 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AmazonProductCards from '@/components/AmazonProductCards.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
+import ArticleCTA from '@/components/ArticleCTA.astro';
+import ShareButtons from '@/components/ShareButtons.astro';
+import RelatedPosts from '@/components/RelatedPosts.astro';
+import StructuredData from '@/components/StructuredData.astro';
+import { formatDate, formatDateISO, getRelatedPosts, type Post } from '@/lib/posts';
+import type { CreatorsProduct } from '@/lib/amazon';
+import type { ProductEntry } from '@/lib/product-entries';
+import { categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+
+interface Props {
+  post: Post;
+  allPosts: Post[];
+  headings: { depth: number; slug: string; text: string }[];
+  amazonProducts?: CreatorsProduct[];
+  productEntries?: ProductEntry[];
+}
+
+const {
+  post,
+  allPosts,
+  headings,
+  amazonProducts = [],
+  productEntries = [],
+} = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  author,
+  category,
+  cta,
+  ogImage,
+  saleEndDate,
+} = post.data;
+const pathname = `/posts/${post.id}/`;
+const related = getRelatedPosts(post, allPosts);
+const cat = categories[category as CategoryId];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  pathname={pathname}
+  ogType="article"
+  ogImage={ogImage}
+  publishedTime={formatDateISO(pubDate)}
+  modifiedTime={formatDateISO(updatedDate ?? pubDate)}
+  structuredData="Article"
+  breadcrumbs={[
+    { name: 'ホーム', path: '/' },
+    { name: '記事一覧', path: '/posts/' },
+    { name: title, path: pathname },
+  ]}
+>
+  <StructuredData
+    type="BreadcrumbList"
+    pathname={pathname}
+    breadcrumbs={[
+      { name: 'ホーム', path: '/' },
+      { name: '記事一覧', path: '/posts/' },
+      { name: title, path: pathname },
+    ]}
+  />
+
+  <article class="container--narrow" itemscope itemtype="https://schema.org/Article">
+    <header class="article-header">
+      <p class="article-header__meta">
+        <span class={`category-badge category-badge--${category}`}>
+          {cat.shortName}
+        </span>
+        {saleEndDate && saleEndDate.valueOf() > Date.now() && (
+          <span class="sale-badge sale-badge--sale">セール開催中</span>
+        )}
+        <time datetime={pubDate.toISOString()} itemprop="datePublished">
+          {formatDate(pubDate)}
+        </time>
+        {updatedDate && updatedDate > pubDate && (
+          <>
+            {' '}
+            （更新:{' '}
+            <time datetime={updatedDate.toISOString()} itemprop="dateModified">
+              {formatDate(updatedDate)}
+            </time>
+            ）
+          </>
+        )}
+        {' · '}
+        <span itemprop="author">{author}</span>
+      </p>
+      <h1 itemprop="headline">{title}</h1>
+      {description && <p itemprop="description">{description}</p>}
+    </header>
+
+    <AmazonProductCards
+      products={amazonProducts}
+      entries={productEntries}
+      title="セール対象商品"
+      showHeading={false}
+    />
+
+    <TableOfContents headings={headings} />
+
+    <div class="prose" itemprop="articleBody">
+      <slot />
+    </div>
+
+    <AmazonProductCards
+      products={amazonProducts}
+      entries={productEntries}
+      title="購入はこちら（Amazon.co.jp）"
+      showNote={false}
+    />
+
+    <ShareButtons title={title} pathname={pathname} />
+
+    <ArticleCTA cta={cta} />
+
+    <RelatedPosts posts={related} />
+  </article>
+</BaseLayout>

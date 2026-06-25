@@ -1,0 +1,20 @@
+---
+import { categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+
+const categoryIds = Object.keys(categories) as CategoryId[];
+---
+
+<nav class="category-tags" aria-label="カテゴリ">
+  <ul class="category-tags__list">
+    {
+      categoryIds.map((id) => (
+        <li>
+          <a href={`/category/${id}/`} class="category-tags__link">
+            #{categories[id].shortName}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

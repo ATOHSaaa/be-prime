@@ -1,0 +1,25 @@
+---
+import type { Post } from '@/lib/posts';
+import { formatDateCompact } from '@/lib/posts';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="home-digest">
+  {
+    posts.map((post) => (
+      <li class="home-digest__item">
+        <a href={`/posts/${post.id}/`} class="home-digest__link">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {formatDateCompact(post.data.pubDate)}
+          </time>
+          <span class="home-digest__title">{post.data.title}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,22 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  /** h2 | h3 */
+  level?: 'h2' | 'h3';
+  id?: string;
+}
+
+const { title, subtitle, level = 'h2', id } = Astro.props;
+const Tag = level;
+---
+
+<Tag class="section-heading" id={id}>
+  {title}
+  {subtitle && (
+    <>
+      <br />
+      <span class="section-heading__subtitle">{subtitle}</span>
+    </>
+  )}
+</Tag>

@@ -1,0 +1,26 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+---
+
+<BaseLayout
+  title="About"
+  description={`${site.name}について。Amazonセール・Prime Day・タイムセールの速報とお得情報を発信しています。`}
+  pathname="/about/"
+>
+  <h1 class="page-title">About</h1>
+  <div class="container--narrow">
+    <p>
+      <strong>{site.name}</strong>は、{site.tagline}をテーマにしたメディアです。
+    </p>
+    <p>
+      Amazonプライムセール、Prime Day、タイムセールなどの大型セールを中心に、お得な買い方・おすすめ商品・Prime会員特典の活用法を解説しています。
+    </p>
+    <h2>編集方針</h2>
+    <ul>
+      <li>セール情報は執筆時点の調査に基づき、更新日を明示します</li>
+      <li>価格・在庫・セール期間は変更されるため、購入前は必ずAmazon.co.jpでご確認ください</li>
+      <li>当サイトのリンクからAmazon.co.jpで購入された場合、紹介料が発生することがあります</li>
+    </ul>
+  </div>
+</BaseLayout>

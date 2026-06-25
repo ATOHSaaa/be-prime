@@ -1,0 +1,51 @@
+---
+import AmazonProductCard from '@/components/AmazonProductCard.astro';
+import type { CreatorsProduct } from '@/lib/amazon';
+import type { ProductEntry } from '@/lib/product-entries';
+
+interface Props {
+  products: CreatorsProduct[];
+  entries: ProductEntry[];
+  title?: string;
+  showHeading?: boolean;
+  showNote?: boolean;
+}
+
+const {
+  products,
+  entries,
+  title = 'セール対象商品（Amazon.co.jp）',
+  showHeading = true,
+  showNote = true,
+} = Astro.props;
+
+const entryByAsin = new Map(entries.map((e) => [e.asin, e]));
+const hasProducts = entries.length > 0;
+---
+
+{
+  hasProducts && (
+    <section class="amazon-product-cards" aria-label={title}>
+      {showHeading && <h2 class="amazon-product-cards__heading">{title}</h2>}
+      {showNote && (
+        <p class="amazon-product-cards__note">
+          価格・在庫・仕様は変更されることがあります。購入前に各商品ページの表示をご確認ください。
+        </p>
+      )}
+      <ul class="amazon-product-cards__list">
+        {products.map((product) => {
+          const entry = entryByAsin.get(product.asin);
+          return (
+            <li>
+              <AmazonProductCard
+                product={product}
+                label={entry?.label}
+                note={entry?.note}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )
+}

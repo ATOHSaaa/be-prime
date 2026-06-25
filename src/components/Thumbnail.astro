@@ -1,0 +1,40 @@
+---
+import type { Post } from '@/lib/posts';
+import { categories } from '@/config/site';
+import type { CategoryId } from '@/config/site';
+
+interface Props {
+  post: Post;
+  /** CSS aspect-ratio（例: "16 / 10"） */
+  ratio?: string;
+  /** プレースホルダー時にタイトルを表示するか */
+  showTitle?: boolean;
+}
+
+const { post, ratio = '16 / 10', showTitle = true } = Astro.props;
+const cat = categories[post.data.category as CategoryId];
+const image = post.data.heroImage ?? post.data.ogImage;
+---
+
+<div class="thumb" style={`--thumb-ratio: ${ratio};`}>
+  {
+    image ? (
+      <img
+        class="thumb__img"
+        src={image}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <div
+        class={`thumb__ph thumb__ph--${post.data.category}`}
+        aria-hidden="true"
+      >
+        <span class="thumb__ph-mark">Be Prime</span>
+        {showTitle && <span class="thumb__ph-title">{post.data.title}</span>}
+        <span class="thumb__ph-cat">{cat.shortName}</span>
+      </div>
+    )
+  }
+</div>
