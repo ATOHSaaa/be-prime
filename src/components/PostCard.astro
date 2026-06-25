@@ -4,6 +4,7 @@ import Thumbnail from '@/components/Thumbnail.astro';
 import { formatDate } from '@/lib/posts';
 import { categories } from '@/config/site';
 import type { CategoryId } from '@/config/site';
+import { path } from '@/lib/paths';
 
 interface Props {
   post: CollectionEntry<'posts'>;
@@ -11,7 +12,7 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, description, pubDate, category } = post.data;
-const href = `/posts/${post.id}/`;
+const href = path(`/posts/${post.id}/`);
 const cat = categories[category as CategoryId];
 ---
 

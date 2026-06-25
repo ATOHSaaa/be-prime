@@ -1,6 +1,7 @@
 ---
 import { categories } from '@/config/site';
 import type { CategoryId } from '@/config/site';
+import { path } from '@/lib/paths';
 
 const categoryIds = Object.keys(categories) as CategoryId[];
 ---
@@ -10,7 +11,7 @@ const categoryIds = Object.keys(categories) as CategoryId[];
     {
       categoryIds.map((id) => (
         <li>
-          <a href={`/category/${id}/`} class="category-tags__link">
+          <a href={path(`/category/${id}/`)} class="category-tags__link">
             #{categories[id].shortName}
           </a>
         </li>

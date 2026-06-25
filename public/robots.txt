@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://be-prime.example/sitemap-index.xml
+Sitemap: https://atohsaaa.github.io/be-prime/sitemap-index.xml

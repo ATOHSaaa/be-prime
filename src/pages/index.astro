@@ -14,6 +14,7 @@ import {
   excludePosts,
 } from '@/lib/posts';
 import { site } from '@/config/site';
+import { path } from '@/lib/paths';
 
 const posts = await getPublishedPosts();
 const activeSales = await getActiveSalePosts();
@@ -51,7 +52,7 @@ const digestPosts =
       <HomeSection
         title="Feature"
         subtitle="セール速報・特集"
-        moreHref="/posts/"
+        moreHref={path('/posts/')}
         id="home-feature"
       >
         <ul class="home-feature-list">
@@ -70,7 +71,7 @@ const digestPosts =
           <HomeSection
             title="Pick Up"
             subtitle="おすすめ商品付き記事"
-            moreHref="/posts/"
+            moreHref={path('/posts/')}
             id="home-pickup"
           >
             <ul class="home-pick-list">
@@ -89,7 +90,7 @@ const digestPosts =
       <HomeSection
         title="Digest"
         subtitle="まとめて読む"
-        moreHref="/posts/"
+        moreHref={path('/posts/')}
         id="home-digest"
       >
         <HomeDigest posts={digestPosts} />

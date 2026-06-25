@@ -1,5 +1,7 @@
 ---
 import { site, affiliate } from '@/config/site';
+import { path } from '@/lib/paths';
+
 const year = new Date().getFullYear();
 ---
 
@@ -7,11 +9,11 @@ const year = new Date().getFullYear();
   <div class="container">
     <nav aria-label="フッターナビゲーション">
       <ul class="site-footer__nav">
-        <li><a href="/about/">About</a></li>
-        <li><a href="/privacy/">プライバシーポリシー</a></li>
-        <li><a href="/privacy/#affiliate">アフィリエイト表記</a></li>
-        <li><a href="/contact/">お問い合わせ</a></li>
-        <li><a href="/sitemap/">サイトマップ</a></li>
+        <li><a href={path('/about/')}>About</a></li>
+        <li><a href={path('/privacy/')}>プライバシーポリシー</a></li>
+        <li><a href={path('/privacy/#affiliate')}>アフィリエイト表記</a></li>
+        <li><a href={path('/contact/')}>お問い合わせ</a></li>
+        <li><a href={path('/sitemap/')}>サイトマップ</a></li>
       </ul>
     </nav>
     <p>

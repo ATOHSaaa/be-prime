@@ -1,6 +1,7 @@
 import rss from '@astrojs/rss';
 import { getPublishedPosts } from '@/lib/posts';
 import { site } from '@/config/site';
+import { canonicalUrl } from '@/lib/seo';
 
 export async function GET(context: { site: string | undefined }) {
   const posts = await getPublishedPosts();
@@ -17,7 +18,7 @@ export async function GET(context: { site: string | undefined }) {
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
-      link: `/posts/${post.id}/`,
+      link: canonicalUrl(`/posts/${post.id}/`),
       author: post.data.author,
     })),
   });

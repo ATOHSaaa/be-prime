@@ -4,6 +4,7 @@ import type { Post } from '@/lib/posts';
 import { formatDateCompact } from '@/lib/posts';
 import { categories } from '@/config/site';
 import type { CategoryId } from '@/config/site';
+import { path } from '@/lib/paths';
 
 interface Props {
   posts: Post[];
@@ -17,7 +18,7 @@ const side = rest.slice(0, 4);
 {
   hero && (
     <section class="home-hero" aria-label="注目記事">
-      <a href={`/posts/${hero.id}/`} class="hero-main">
+      <a href={path(`/posts/${hero.id}/`)} class="hero-main">
         <Thumbnail post={hero} ratio="16 / 9" />
         <div class="hero-main__body">
           <span
@@ -40,7 +41,7 @@ const side = rest.slice(0, 4);
         <ul class="hero-side">
           {side.map((post) => (
             <li>
-              <a href={`/posts/${post.id}/`} class="hero-side__link">
+              <a href={path(`/posts/${post.id}/`)} class="hero-side__link">
                 <Thumbnail post={post} ratio="16 / 10" showTitle={false} />
                 <div class="hero-side__body">
                   <span

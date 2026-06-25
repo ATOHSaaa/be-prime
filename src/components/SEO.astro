@@ -1,6 +1,7 @@
 ---
 import { site } from '@/config/site';
 import { canonicalUrl, absoluteImageUrl } from '@/lib/seo';
+import { path } from '@/lib/paths';
 
 interface Props {
   title: string;
@@ -63,5 +64,5 @@ const image = absoluteImageUrl(ogImage ?? '/og-default.png');
   <meta property="article:author" content={author} />
 )}
 
-<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-<link rel="alternate" type="application/rss+xml" title={`${site.name} RSS`} href="/rss.xml" />
+<link rel="icon" href={path('/favicon.svg')} type="image/svg+xml" />
+<link rel="alternate" type="application/rss+xml" title={`${site.name} RSS`} href={path('/rss.xml')} />

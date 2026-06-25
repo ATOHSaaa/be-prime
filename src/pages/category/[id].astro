@@ -5,6 +5,7 @@ import CategoryTags from '@/components/home/CategoryTags.astro';
 import { getPublishedPosts, getPostsByCategory } from '@/lib/posts';
 import { categories, site } from '@/config/site';
 import type { CategoryId } from '@/config/site';
+import { path } from '@/lib/paths';
 
 export function getStaticPaths() {
   const ids = Object.keys(categories) as CategoryId[];
@@ -38,6 +39,6 @@ const posts = getPostsByCategory(allPosts, id);
     )
   }
   <p class="post-list-footer">
-    <a class="text-link-arrow" href="/posts/">すべての記事を見る →</a>
+    <a class="text-link-arrow" href={path('/posts/')}>すべての記事を見る →</a>
   </p>
 </BaseLayout>

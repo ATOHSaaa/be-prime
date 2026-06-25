@@ -1,5 +1,6 @@
 ---
 import { editor, site } from '@/config/site';
+import { path } from '@/lib/paths';
 
 interface Props {
   /** 見出しの id（同一ページで複数使うときはユニークに） */
@@ -16,7 +17,7 @@ const hasX = Boolean(site.social.x);
   aria-labelledby={headingId}
 >
   <div class="editor-profile__avatar">
-    <img src="/favicon.svg" width="72" height="72" alt="" />
+    <img src={path('/favicon.svg')} width="72" height="72" alt="" />
   </div>
   <h2 id={headingId} class="editor-profile__name">
     {editor.name}
@@ -24,7 +25,7 @@ const hasX = Boolean(site.social.x);
   <p class="editor-profile__role">{editor.role}</p>
   <p class="editor-profile__bio">{editor.bio}</p>
   <p class="editor-profile__links">
-    <a href={editor.aboutUrl}>プロフィール・編集方針</a>
+    <a href={path(editor.aboutUrl)}>プロフィール・編集方針</a>
   </p>
   {hasX && (
     <p class="editor-profile__social">

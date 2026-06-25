@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { path } from '@/lib/paths';
 ---
 
 <BaseLayout
@@ -10,6 +11,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 >
   <h1 class="page-title">404 — ページが見つかりません</h1>
   <p>
-    <a href="/">トップページ</a>または<a href="/posts/">記事一覧</a>からお探しください。
+    <a href={path('/')}>トップページ</a>または<a href={path('/posts/')}>記事一覧</a>からお探しください。
   </p>
 </BaseLayout>

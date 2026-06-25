@@ -2,6 +2,7 @@
 import Thumbnail from '@/components/Thumbnail.astro';
 import type { Post } from '@/lib/posts';
 import { formatDateCompact } from '@/lib/posts';
+import { path } from '@/lib/paths';
 
 interface Props {
   posts: Post[];
@@ -23,7 +24,7 @@ const ranked = posts.slice(0, 5);
         {ranked.map((post, index) => (
           <li class="home-ranking__item">
             <span class="home-ranking__rank">{index + 1}</span>
-            <a href={`/posts/${post.id}/`} class="home-ranking__link">
+            <a href={path(`/posts/${post.id}/`)} class="home-ranking__link">
               <span class="home-ranking__thumb">
                 <Thumbnail post={post} ratio="1 / 1" showTitle={false} />
               </span>

@@ -4,6 +4,7 @@ import type { Post } from '@/lib/posts';
 import { formatDateCompact } from '@/lib/posts';
 import { categories } from '@/config/site';
 import type { CategoryId } from '@/config/site';
+import { path } from '@/lib/paths';
 
 interface Props {
   post: Post;
@@ -14,7 +15,7 @@ const cat = categories[post.data.category as CategoryId];
 const productCount = post.data.products?.length ?? 0;
 ---
 
-<a href={`/posts/${post.id}/`} class="home-card home-card--pick">
+<a href={path(`/posts/${post.id}/`)} class="home-card home-card--pick">
   <div class="home-card__thumb-wrap">
     <Thumbnail post={post} ratio="16 / 10" showTitle={false} />
     {productCount > 0 && (

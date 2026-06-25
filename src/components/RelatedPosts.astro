@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { formatDate } from '@/lib/posts';
+import { path } from '@/lib/paths';
 
 interface Props {
   posts: CollectionEntry<'posts'>[];
@@ -16,7 +17,7 @@ const { posts } = Astro.props;
       <ul>
         {posts.map((post) => (
           <li>
-            <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+            <a href={path(`/posts/${post.id}/`)}>{post.data.title}</a>
             <span> — </span>
             <time datetime={post.data.pubDate.toISOString()}>
               {formatDate(post.data.pubDate)}
