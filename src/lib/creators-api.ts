@@ -7,7 +7,7 @@
 import type { CreatorsProduct } from './amazon';
 import { affiliateUrl, productUrl } from './amazon';
 
-const TOKEN_URL = 'https://api.amazon.com/auth/o2/token';
+const TOKEN_URL = 'https://api.amazon.co.jp/auth/o2/token';
 const API_BASE = 'https://creatorsapi.amazon/catalog/v1';
 const MARKETPLACE = 'www.amazon.co.jp';
 
@@ -17,7 +17,6 @@ const GET_ITEMS_RESOURCES = [
   'offersV2.listings.price',
   'offersV2.listings.availability',
   'offersV2.listings.dealDetails',
-  'offersV2.listings.savings',
   'offersV2.listings.loyaltyPoints',
 ] as const;
 
@@ -129,6 +128,7 @@ async function postCreatorsApi<T>(
     },
     body: JSON.stringify({
       partnerTag: config.partnerTag,
+      partnerType: 'Associates',
       marketplace: MARKETPLACE,
       ...body,
     }),
@@ -162,6 +162,7 @@ export async function fetchProductsByAsins(
       itemsResult?: { items?: ApiItem[] };
     }>(config, 'getItems', {
       itemIds: unique,
+      itemIdType: 'ASIN',
       resources: [...GET_ITEMS_RESOURCES],
     });
 
