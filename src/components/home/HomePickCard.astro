@@ -1,6 +1,7 @@
 ---
 import Thumbnail from '@/components/Thumbnail.astro';
 import type { Post } from '@/lib/posts';
+import type { PostThumbnail } from '@/lib/post-thumbnail';
 import { formatDateCompact } from '@/lib/posts';
 import { categories } from '@/config/site';
 import type { CategoryId } from '@/config/site';
@@ -8,18 +9,24 @@ import { path } from '@/lib/paths';
 
 interface Props {
   post: Post;
+  thumbnail?: PostThumbnail;
 }
 
-const { post } = Astro.props;
+const { post, thumbnail } = Astro.props;
 const cat = categories[post.data.category as CategoryId];
 const productCount = post.data.products?.length ?? 0;
 ---
 
 <a href={path(`/posts/${post.id}/`)} class="home-card home-card--pick">
   <div class="home-card__thumb-wrap">
-    <Thumbnail post={post} ratio="16 / 10" showTitle={false} />
-    {productCount > 0 && (
-      <span class="home-card__badge">おすすめ {productCount}点</span>
+    <Thumbnail
+      post={post}
+      ratio="16 / 10"
+      showTitle={false}
+      thumbnail={thumbnail}
+    />
+    {productCount > 1 && (
+      <span class="home-card__badge">全{productCount}商品</span>
     )}
   </div>
   <div class="home-card__body">

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import AmazonProductCards from '@/components/AmazonProductCards.astro';
+import Thumbnail from '@/components/Thumbnail.astro';
 import TableOfContents from '@/components/TableOfContents.astro';
 import ArticleCTA from '@/components/ArticleCTA.astro';
 import ShareButtons from '@/components/ShareButtons.astro';
@@ -9,6 +10,7 @@ import StructuredData from '@/components/StructuredData.astro';
 import { formatDate, formatDateISO, getRelatedPosts, type Post } from '@/lib/posts';
 import type { CreatorsProduct } from '@/lib/amazon';
 import type { ProductEntry } from '@/lib/product-entries';
+import type { PostThumbnail } from '@/lib/post-thumbnail';
 import { categories } from '@/config/site';
 import type { CategoryId } from '@/config/site';
 
@@ -18,6 +20,8 @@ interface Props {
   headings: { depth: number; slug: string; text: string }[];
   amazonProducts?: CreatorsProduct[];
   productEntries?: ProductEntry[];
+  postThumbnail?: PostThumbnail;
+  ogImage?: string;
 }
 
 const {
@@ -26,6 +30,8 @@ const {
   headings,
   amazonProducts = [],
   productEntries = [],
+  postThumbnail,
+  ogImage: ogImageOverride,
 } = Astro.props;
 const {
   title,
@@ -35,9 +41,10 @@ const {
   author,
   category,
   cta,
-  ogImage,
+  ogImage: ogImageFrontmatter,
   saleEndDate,
 } = post.data;
+const ogImage = ogImageOverride ?? ogImageFrontmatter;
 const pathname = `/posts/${post.id}/`;
 const related = getRelatedPosts(post, allPosts);
 const cat = categories[category as CategoryId];
@@ -97,6 +104,19 @@ const cat = categories[category as CategoryId];
       {description && <p itemprop="description">{description}</p>}
     </header>
 
+    {
+      postThumbnail?.kind === 'product' && (
+        <div class="article-product-thumb" aria-hidden="true">
+          <Thumbnail
+            post={post}
+            ratio="16 / 9"
+            showTitle={false}
+            thumbnail={postThumbnail}
+          />
+        </div>
+      )
+    }
+
     <AmazonProductCards
       products={amazonProducts}
       entries={productEntries}
@@ -109,13 +129,6 @@ const cat = categories[category as CategoryId];
     <div class="prose" itemprop="articleBody">
       <slot />
     </div>
-
-    <AmazonProductCards
-      products={amazonProducts}
-      entries={productEntries}
-      title="購入はこちら（Amazon.co.jp）"
-      showNote={false}
-    />
 
     <ShareButtons title={title} pathname={pathname} />
 

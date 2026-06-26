@@ -1,14 +1,16 @@
 ---
 import HomeRanking from '@/components/home/HomeRanking.astro';
 import type { Post } from '@/lib/posts';
+import type { PostThumbnail } from '@/lib/post-thumbnail';
 
 interface Props {
   posts: Post[];
+  thumbnails?: Map<string, PostThumbnail>;
 }
 
-const { posts } = Astro.props;
+const { posts, thumbnails } = Astro.props;
 ---
 
 <aside class="home-sidebar" aria-label="サイドバー">
-  <HomeRanking posts={posts} />
+  <HomeRanking posts={posts} thumbnails={thumbnails} />
 </aside>

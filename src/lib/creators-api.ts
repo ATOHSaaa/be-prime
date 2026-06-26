@@ -45,6 +45,7 @@ interface ApiItem {
 }
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
+const productCache = new Map<string, CreatorsProduct>();
 
 function getConfig(): CreatorsApiConfig | null {
   const accessKey = import.meta.env.AMAZON_CREATORS_API_ACCESS_KEY;
@@ -155,28 +156,42 @@ export async function fetchProductsByAsins(
     return [];
   }
 
-  const unique = [...new Set(asins)].slice(0, 10);
+  const unique = [...new Set(asins.map((a) => a.toUpperCase()))];
+  const cached = unique
+    .map((asin) => productCache.get(asin))
+    .filter((p): p is CreatorsProduct => p !== undefined);
+  const missing = unique.filter((asin) => !productCache.has(asin));
+
+  if (missing.length === 0) {
+    return unique
+      .map((asin) => productCache.get(asin))
+      .filter((p): p is CreatorsProduct => p !== undefined);
+  }
 
   try {
-    const data = await postCreatorsApi<{
-      itemsResult?: { items?: ApiItem[] };
-    }>(config, 'getItems', {
-      itemIds: unique,
-      itemIdType: 'ASIN',
-      resources: [...GET_ITEMS_RESOURCES],
-    });
+    for (let i = 0; i < missing.length; i += 10) {
+      const chunk = missing.slice(i, i + 10);
+      const data = await postCreatorsApi<{
+        itemsResult?: { items?: ApiItem[] };
+      }>(config, 'getItems', {
+        itemIds: chunk,
+        itemIdType: 'ASIN',
+        resources: [...GET_ITEMS_RESOURCES],
+      });
 
-    const items = data.itemsResult?.items ?? [];
-    const byAsin = new Map(
-      items.map((item) => [item.asin, mapItem(item, config.partnerTag)]),
-    );
+      const items = data.itemsResult?.items ?? [];
+      for (const item of items) {
+        const product = mapItem(item, config.partnerTag);
+        productCache.set(item.asin.toUpperCase(), product);
+      }
+    }
 
     return unique
-      .map((asin) => byAsin.get(asin))
+      .map((asin) => productCache.get(asin))
       .filter((p): p is CreatorsProduct => p !== undefined);
   } catch (error) {
     console.error('[Creators API] fetchProductsByAsins failed:', error);
-    return [];
+    return cached;
   }
 }
 

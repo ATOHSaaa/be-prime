@@ -8,8 +8,8 @@ const AMAZON_IMAGE_BASE =
   'https://images-fe.ssl-images-amazon.com/images/P';
 
 /** ASIN から商品画像URL（API 未設定時のフォールバック） */
-export function amazonProductImageUrl(asin: string): string {
-  return `${AMAZON_IMAGE_BASE}/${asin}.09._SL500_.jpg`;
+export function amazonProductImageUrl(asin: string, size = 500): string {
+  return `${AMAZON_IMAGE_BASE}/${asin}.09._SL${size}_.jpg`;
 }
 
 export function buildFallbackProduct(entry: ProductEntry): CreatorsProduct {

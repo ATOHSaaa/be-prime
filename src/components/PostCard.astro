@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Thumbnail from '@/components/Thumbnail.astro';
+import type { PostThumbnail } from '@/lib/post-thumbnail';
 import { formatDate } from '@/lib/posts';
 import { categories } from '@/config/site';
 import type { CategoryId } from '@/config/site';
@@ -8,9 +9,10 @@ import { path } from '@/lib/paths';
 
 interface Props {
   post: CollectionEntry<'posts'>;
+  thumbnail?: PostThumbnail;
 }
 
-const { post } = Astro.props;
+const { post, thumbnail } = Astro.props;
 const { title, description, pubDate, category } = post.data;
 const href = path(`/posts/${post.id}/`);
 const cat = categories[category as CategoryId];
@@ -18,7 +20,7 @@ const cat = categories[category as CategoryId];
 
 <a href={href} class="post-card">
   <div class="post-card__thumb">
-    <Thumbnail post={post} ratio="16 / 10" showTitle={false} />
+    <Thumbnail post={post} ratio="16 / 10" showTitle={false} thumbnail={thumbnail} />
   </div>
   <div class="post-card__body">
     <p class="post-card__meta">

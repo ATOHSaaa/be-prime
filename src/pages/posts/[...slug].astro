@@ -4,6 +4,11 @@ import PostLayout from '@/layouts/PostLayout.astro';
 import { fetchProductsByAsins } from '@/lib/creators-api';
 import { resolveProducts } from '@/lib/product-entries';
 import { getPublishedPosts } from '@/lib/posts';
+import {
+  getPostOgImage,
+  productImageMapFromApi,
+  resolvePostThumbnail,
+} from '@/lib/post-thumbnail';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -33,6 +38,13 @@ const apiProducts =
     ? await fetchProductsByAsins(productEntries.map((p) => p.asin))
     : [];
 const amazonProducts = resolveProducts(productEntries, apiProducts);
+
+const imageByAsin = productImageMapFromApi(
+  productEntries.map((p) => p.asin),
+  apiProducts,
+);
+const postThumbnail = resolvePostThumbnail(post, imageByAsin);
+const ogImage = getPostOgImage(post, postThumbnail);
 ---
 
 <PostLayout
@@ -41,6 +53,8 @@ const amazonProducts = resolveProducts(productEntries, apiProducts);
   headings={headings}
   amazonProducts={amazonProducts}
   productEntries={productEntries}
+  postThumbnail={postThumbnail}
+  ogImage={ogImage}
 >
   <Content />
 </PostLayout>

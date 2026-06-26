@@ -1,15 +1,17 @@
 ---
 import Thumbnail from '@/components/Thumbnail.astro';
 import type { Post } from '@/lib/posts';
+import type { PostThumbnail } from '@/lib/post-thumbnail';
 import { formatDateCompact } from '@/lib/posts';
 import { path } from '@/lib/paths';
 
 interface Props {
   posts: Post[];
   title?: string;
+  thumbnails?: Map<string, PostThumbnail>;
 }
 
-const { posts, title = 'Ranking' } = Astro.props;
+const { posts, title = 'Ranking', thumbnails } = Astro.props;
 const ranked = posts.slice(0, 5);
 ---
 
@@ -23,10 +25,22 @@ const ranked = posts.slice(0, 5);
       <ol class="home-ranking__list">
         {ranked.map((post, index) => (
           <li class="home-ranking__item">
-            <span class="home-ranking__rank">{index + 1}</span>
+            <span
+              class:list={[
+                'home-ranking__rank',
+                index < 3 && `home-ranking__rank--${index + 1}`,
+              ]}
+            >
+              {index + 1}
+            </span>
             <a href={path(`/posts/${post.id}/`)} class="home-ranking__link">
               <span class="home-ranking__thumb">
-                <Thumbnail post={post} ratio="1 / 1" showTitle={false} />
+                <Thumbnail
+                  post={post}
+                  ratio="1 / 1"
+                  variant="ranking"
+                  thumbnail={thumbnails?.get(post.id)}
+                />
               </span>
               <span class="home-ranking__text">
                 <span class="home-ranking__post-title">{post.data.title}</span>

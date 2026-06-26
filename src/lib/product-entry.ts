@@ -3,6 +3,7 @@ export interface ProductEntry {
   label?: string;
   note?: string;
   price?: string;
+  referencePrice?: string;
   savings?: string;
 }
 

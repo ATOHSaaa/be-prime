@@ -25,6 +25,7 @@ const posts = defineCollection({
           label: z.string().optional(),
           note: z.string().optional(),
           price: z.string().optional(),
+          referencePrice: z.string().optional(),
           savings: z.string().optional(),
         }),
       )

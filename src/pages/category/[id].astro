@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
 import CategoryTags from '@/components/home/CategoryTags.astro';
 import { getPublishedPosts, getPostsByCategory } from '@/lib/posts';
+import { buildPostThumbnailMap } from '@/lib/post-thumbnail';
 import { categories, site } from '@/config/site';
 import type { CategoryId } from '@/config/site';
 import { path } from '@/lib/paths';
@@ -16,6 +17,7 @@ const { id } = Astro.params as { id: CategoryId };
 const cat = categories[id];
 
 const allPosts = await getPublishedPosts();
+const thumbnails = await buildPostThumbnailMap(allPosts);
 const posts = getPostsByCategory(allPosts, id);
 ---
 
@@ -33,7 +35,7 @@ const posts = getPostsByCategory(allPosts, id);
     ) : (
       <div class="post-list">
         {posts.map((post) => (
-          <PostCard post={post} />
+          <PostCard post={post} thumbnail={thumbnails.get(post.id)} />
         ))}
       </div>
     )

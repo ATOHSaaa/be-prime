@@ -1,39 +1,145 @@
 ---
 import type { Post } from '@/lib/posts';
-import { categories } from '@/config/site';
-import type { CategoryId } from '@/config/site';
+import type { PostThumbnail } from '@/lib/post-thumbnail';
+import { resolvePostThumbnail } from '@/lib/post-thumbnail';
+import { categories, ctas } from '@/config/site';
+import type { CategoryId, CtaId } from '@/config/site';
 
 interface Props {
   post: Post;
   /** CSS aspect-ratio（例: "16 / 10"） */
   ratio?: string;
-  /** プレースホルダー時にタイトルを表示するか */
+  /**
+   * false = カード本文にタイトルがあるとき（Feature等）。
+   * ガイド記事は装飾サムネのみ表示。
+   */
   showTitle?: boolean;
+  /** サイドバー Ranking 用の超小型表示 */
+  variant?: 'default' | 'ranking';
+  thumbnail?: PostThumbnail;
 }
 
-const { post, ratio = '16 / 10', showTitle = true } = Astro.props;
+const {
+  post,
+  ratio = '16 / 10',
+  showTitle = false,
+  variant = 'default',
+  thumbnail: thumbnailProp,
+} = Astro.props;
 const cat = categories[post.data.category as CategoryId];
-const image = post.data.heroImage ?? post.data.ogImage;
+const thumbnail = thumbnailProp ?? resolvePostThumbnail(post);
+const heroImage =
+  thumbnail?.kind === 'hero' ? thumbnail.imageUrl : undefined;
+const isRanking = variant === 'ranking';
+const showPrices =
+  thumbnail?.kind === 'product' &&
+  (thumbnail.price || thumbnail.referencePrice);
+const guideKicker =
+  post.data.category === 'deals' ? '特集・ガイド' : cat.shortName;
+const guideBadge = post.data.cta
+  ? ctas[post.data.cta as CtaId]?.shortName
+  : undefined;
+const rankingGuideLabel =
+  post.data.category === 'deals' ? '特集' : cat.shortName;
 ---
 
-<div class="thumb" style={`--thumb-ratio: ${ratio};`}>
+<div
+  class:list={['thumb', isRanking && 'thumb--ranking']}
+  style={`--thumb-ratio: ${ratio};`}
+>
   {
-    image ? (
+    isRanking ? (
+      thumbnail?.kind === 'product' ? (
+        <div
+          class={`thumb__ranking thumb__ranking--product thumb__ranking--${post.data.category}`}
+          aria-hidden="true"
+        >
+          {thumbnail.savings && (
+            <span class="thumb__ranking-off">{thumbnail.savings}</span>
+          )}
+          <img
+            class="thumb__ranking-img"
+            src={thumbnail.imageUrl}
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ) : heroImage ? (
+        <img
+          class="thumb__ranking-img thumb__ranking-img--cover"
+          src={heroImage}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <div
+          class={`thumb__ranking thumb__ranking--guide thumb__ranking--${post.data.category}`}
+          aria-hidden="true"
+        >
+          <div class="thumb__ranking-stack">
+            <span class="thumb__ranking-icon" aria-hidden="true" />
+            <span class="thumb__ranking-label">{rankingGuideLabel}</span>
+          </div>
+        </div>
+      )
+    ) : thumbnail?.kind === 'product' ? (
+      <div
+        class={`thumb__product thumb__product--${post.data.category}`}
+        aria-hidden="true"
+      >
+        {thumbnail.savings && (
+          <span class="thumb__product-badge">{thumbnail.savings}</span>
+        )}
+        <div class="thumb__product-visual">
+          <img
+            class="thumb__product-img"
+            src={thumbnail.imageUrl}
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        {showPrices && (
+          <div class="thumb__product-prices">
+            {thumbnail.referencePrice && (
+              <span class="thumb__product-ref">{thumbnail.referencePrice}</span>
+            )}
+            {thumbnail.price && (
+              <span class="thumb__product-sale">{thumbnail.price}</span>
+            )}
+          </div>
+        )}
+      </div>
+    ) : heroImage ? (
       <img
         class="thumb__img"
-        src={image}
+        src={heroImage}
         alt=""
         loading="lazy"
         decoding="async"
       />
-    ) : (
+    ) : showTitle ? (
       <div
         class={`thumb__ph thumb__ph--${post.data.category}`}
         aria-hidden="true"
       >
-        <span class="thumb__ph-mark">Be Prime</span>
-        {showTitle && <span class="thumb__ph-title">{post.data.title}</span>}
         <span class="thumb__ph-cat">{cat.shortName}</span>
+        <span class="thumb__ph-title">{post.data.title}</span>
+      </div>
+    ) : (
+      <div
+        class={`thumb__guide thumb__guide--${post.data.category}`}
+        aria-hidden="true"
+      >
+        {guideBadge && (
+          <span class="thumb__guide-badge">{guideBadge}</span>
+        )}
+        <div class="thumb__guide-stack">
+          <span class="thumb__guide-icon" aria-hidden="true" />
+          <span class="thumb__guide-label">{guideKicker}</span>
+        </div>
       </div>
     )
   }

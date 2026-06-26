@@ -1,6 +1,7 @@
 ---
 import Thumbnail from '@/components/Thumbnail.astro';
 import type { Post } from '@/lib/posts';
+import type { PostThumbnail } from '@/lib/post-thumbnail';
 import { formatDateCompact } from '@/lib/posts';
 import { categories } from '@/config/site';
 import type { CategoryId } from '@/config/site';
@@ -9,14 +10,20 @@ import { path } from '@/lib/paths';
 interface Props {
   post: Post;
   showCategory?: boolean;
+  thumbnail?: PostThumbnail;
 }
 
-const { post, showCategory = true } = Astro.props;
+const { post, showCategory = true, thumbnail } = Astro.props;
 const cat = categories[post.data.category as CategoryId];
 ---
 
 <a href={path(`/posts/${post.id}/`)} class="home-card">
-  <Thumbnail post={post} ratio="16 / 10" showTitle={false} />
+  <Thumbnail
+    post={post}
+    ratio="16 / 10"
+    showTitle={false}
+    thumbnail={thumbnail}
+  />
   <div class="home-card__body">
     {showCategory && (
       <span class={`category-badge category-badge--${post.data.category}`}>

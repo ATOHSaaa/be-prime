@@ -3,6 +3,9 @@ import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'node:url';
 import { rehypeAffiliateFirstMention } from './src/plugins/rehype-affiliate-first-mention.ts';
 import { rehypeAmazonAffiliateLinks } from './src/plugins/rehype-amazon-affiliate-links.ts';
+import { rehypeFixUnparsedBold } from './src/plugins/rehype-fix-unparsed-bold.ts';
+import { rehypeKvTable } from './src/plugins/rehype-kv-table.ts';
+import { remarkKvTable } from './src/plugins/remark-kv-table.ts';
 import { remarkProductEmbed } from './src/plugins/remark-product-embed.ts';
 
 /** XMLサイトマップから除外するパス */
@@ -41,8 +44,13 @@ export default defineConfig({
     shikiConfig: {
       theme: 'github-light',
     },
-    remarkPlugins: [remarkProductEmbed],
-    rehypePlugins: [rehypeAffiliateFirstMention, rehypeAmazonAffiliateLinks],
+    remarkPlugins: [remarkProductEmbed, remarkKvTable],
+    rehypePlugins: [
+      rehypeKvTable,
+      rehypeAffiliateFirstMention,
+      rehypeAmazonAffiliateLinks,
+      rehypeFixUnparsedBold,
+    ],
   },
   vite: {
     resolve: {
