@@ -6,4 +6,7 @@ export const amazonLinks = {
   amazonDevicesSale: 'https://www.amazon.co.jp/b/?node=207851558051',
   goldbox: 'https://www.amazon.co.jp/gp/goldbox',
   amazonPrime: 'https://www.amazon.co.jp/amazonprime',
+  /** 夏準備ポイント祭り 2026 */
+  summerPointFestival:
+    'https://www.amazon.co.jp/b?_encoding=UTF8&ie=UTF8&node=206531287051',
 } as const;

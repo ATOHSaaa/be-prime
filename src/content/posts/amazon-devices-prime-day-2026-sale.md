@@ -1,6 +1,6 @@
 ---
 title: 'Prime Day 2026 Amazonデバイスセール｜Fire TV・Echo・Kindleの先行価格'
-description: 'Prime Day 2026向けのAmazonデバイス先行セールが7月7日から。Fire TV Stick HD 3,780円など公式掲載の価格と、カテゴリ別の買い方の見方を整理します。'
+description: 'Prime Day 2026向けのAmazonデバイス先行セールが7月7日から。Fire TV Stick HD 3,780円など公式掲載の価格と、カテゴリ別の買い方の見方について解説します。'
 pubDate: 2026-06-26
 category: deals
 tags: [Prime Day, Amazonデバイス, Fire TV, Echo, Kindle, セール]

@@ -4,6 +4,7 @@ export const site = {
   name: 'Be Prime',
   alternateName: 'Be Prime',
   tagline: 'Amazonセール・お得情報',
+  homeTitle: 'Amazonセールなどお得な情報をお届け',
   description:
     'Amazonプライムセール、Prime Day、タイムセールの速報とおすすめ商品を解説するメディアです。',
   url: 'https://atohsaaa.github.io/be-prime',
@@ -91,3 +92,15 @@ export const ctas = {
 } as const;
 
 export type CtaId = keyof typeof ctas;
+
+/** 配信記事などのブランドサムネイル */
+export const thumbnailBrands = {
+  'prime-video': {
+    id: 'prime-video' as const,
+    labelPrime: 'Prime',
+    labelVideo: 'Video',
+    accent: '#00A8E1',
+  },
+} as const;
+
+export type ThumbnailBrandId = keyof typeof thumbnailBrands;

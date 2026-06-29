@@ -1,6 +1,6 @@
 ---
 title: 'Bose Ultra Open Earbudsが28,800円（20%OFF）｜耳を塞がない空間オーディオ'
-description: 'Bose Ultra Open Earbudsが参考価格36,000円から20%OFFの28,800円になっています。オープンイヤーのスペックや買い時の見方などについて整理します。'
+description: 'Bose Ultra Open Earbudsが参考価格36,000円から20%OFFの28,800円になっています。オープンイヤーのスペックや買い時の見方などについて解説します。'
 pubDate: 2026-06-25
 updatedDate: 2026-06-25
 category: gadget

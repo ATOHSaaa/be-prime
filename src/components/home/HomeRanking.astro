@@ -11,13 +11,12 @@ interface Props {
   thumbnails?: Map<string, PostThumbnail>;
 }
 
-const { posts, title = 'Ranking', thumbnails } = Astro.props;
+const { posts, title = 'Latest', thumbnails } = Astro.props;
 const ranked = posts.slice(0, 5);
 ---
 
 <section class="home-ranking" aria-label={title}>
   <h2 class="home-ranking__title">{title}</h2>
-  <p class="home-ranking__tab home-ranking__tab--active">Latest</p>
   {
     ranked.length === 0 ? (
       <p class="home-ranking__empty">記事を準備中です。</p>

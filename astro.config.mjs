@@ -5,6 +5,7 @@ import { rehypeAffiliateFirstMention } from './src/plugins/rehype-affiliate-firs
 import { rehypeAmazonAffiliateLinks } from './src/plugins/rehype-amazon-affiliate-links.ts';
 import { rehypeFixUnparsedBold } from './src/plugins/rehype-fix-unparsed-bold.ts';
 import { rehypeKvTable } from './src/plugins/rehype-kv-table.ts';
+import { remarkFixMarkdownBold } from './src/plugins/remark-fix-markdown-bold.ts';
 import { remarkKvTable } from './src/plugins/remark-kv-table.ts';
 import { remarkProductEmbed } from './src/plugins/remark-product-embed.ts';
 
@@ -44,7 +45,7 @@ export default defineConfig({
     shikiConfig: {
       theme: 'github-light',
     },
-    remarkPlugins: [remarkProductEmbed, remarkKvTable],
+    remarkPlugins: [remarkFixMarkdownBold, remarkProductEmbed, remarkKvTable],
     rehypePlugins: [
       rehypeKvTable,
       rehypeAffiliateFirstMention,

@@ -1,9 +1,12 @@
 ---
 import type { Post } from '@/lib/posts';
 import type { PostThumbnail } from '@/lib/post-thumbnail';
-import { resolvePostThumbnail } from '@/lib/post-thumbnail';
-import { categories, ctas } from '@/config/site';
-import type { CategoryId, CtaId } from '@/config/site';
+import {
+  getThumbnailCoverUrl,
+  resolvePostThumbnail,
+} from '@/lib/post-thumbnail';
+import { categories, ctas, thumbnailBrands } from '@/config/site';
+import type { CategoryId, CtaId, ThumbnailBrandId } from '@/config/site';
 
 interface Props {
   post: Post;
@@ -16,6 +19,8 @@ interface Props {
   showTitle?: boolean;
   /** サイドバー Ranking 用の超小型表示 */
   variant?: 'default' | 'ranking';
+  /** large = モザイクをフル表示、compact = 代表1枚のみ */
+  display?: 'large' | 'compact';
   thumbnail?: PostThumbnail;
 }
 
@@ -24,13 +29,23 @@ const {
   ratio = '16 / 10',
   showTitle = false,
   variant = 'default',
+  display = 'compact',
   thumbnail: thumbnailProp,
 } = Astro.props;
 const cat = categories[post.data.category as CategoryId];
 const thumbnail = thumbnailProp ?? resolvePostThumbnail(post);
-const heroImage =
-  thumbnail?.kind === 'hero' ? thumbnail.imageUrl : undefined;
+const coverImage = getThumbnailCoverUrl(thumbnail);
 const isRanking = variant === 'ranking';
+const isBrand = thumbnail?.kind === 'brand';
+const brand =
+  isBrand && thumbnail.kind === 'brand'
+    ? thumbnailBrands[thumbnail.brand as ThumbnailBrandId]
+    : undefined;
+const brandBadge =
+  isBrand && thumbnail.kind === 'brand' ? thumbnail.badge : undefined;
+const showMosaic =
+  thumbnail?.kind === 'mosaic' && display === 'large' && !isRanking;
+const mosaicCount = showMosaic ? thumbnail.imageUrls.length : 0;
 const showPrices =
   thumbnail?.kind === 'product' &&
   (thumbnail.price || thumbnail.referencePrice);
@@ -44,7 +59,11 @@ const rankingGuideLabel =
 ---
 
 <div
-  class:list={['thumb', isRanking && 'thumb--ranking']}
+  class:list={[
+    'thumb',
+    isRanking && 'thumb--ranking',
+    isBrand && 'thumb--brand',
+  ]}
   style={`--thumb-ratio: ${ratio};`}
 >
   {
@@ -54,9 +73,6 @@ const rankingGuideLabel =
           class={`thumb__ranking thumb__ranking--product thumb__ranking--${post.data.category}`}
           aria-hidden="true"
         >
-          {thumbnail.savings && (
-            <span class="thumb__ranking-off">{thumbnail.savings}</span>
-          )}
           <img
             class="thumb__ranking-img"
             src={thumbnail.imageUrl}
@@ -65,10 +81,17 @@ const rankingGuideLabel =
             decoding="async"
           />
         </div>
-      ) : heroImage ? (
+      ) : isBrand && brand ? (
+        <div class="thumb__brand thumb__brand--compact" aria-hidden="true">
+          <p class="thumb__brand-logo">
+            <span class="thumb__brand-logo-prime">{brand.labelPrime}</span>
+            <span class="thumb__brand-logo-video">{brand.labelVideo}</span>
+          </p>
+        </div>
+      ) : coverImage ? (
         <img
           class="thumb__ranking-img thumb__ranking-img--cover"
-          src={heroImage}
+          src={coverImage}
           alt=""
           loading="lazy"
           decoding="async"
@@ -84,6 +107,26 @@ const rankingGuideLabel =
           </div>
         </div>
       )
+    ) : showMosaic ? (
+      <div
+        class:list={[
+          'thumb__mosaic',
+          `thumb__mosaic--${mosaicCount}`,
+        ]}
+        aria-hidden="true"
+      >
+        {
+          thumbnail.imageUrls.map((url) => (
+            <img
+              class="thumb__mosaic-item"
+              src={url}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          ))
+        }
+      </div>
     ) : thumbnail?.kind === 'product' ? (
       <div
         class={`thumb__product thumb__product--${post.data.category}`}
@@ -112,10 +155,24 @@ const rankingGuideLabel =
           </div>
         )}
       </div>
-    ) : heroImage ? (
+    ) : isBrand && brand ? (
+      <div class="thumb__brand" aria-hidden="true">
+        {brandBadge && (
+          <span class="thumb__brand-badge">{brandBadge}</span>
+        )}
+        <div class="thumb__brand-glow" aria-hidden="true" />
+        <div class="thumb__brand-stack">
+          <span class="thumb__brand-play" aria-hidden="true" />
+          <p class="thumb__brand-logo">
+            <span class="thumb__brand-logo-prime">{brand.labelPrime}</span>
+            <span class="thumb__brand-logo-video">{brand.labelVideo}</span>
+          </p>
+        </div>
+      </div>
+    ) : coverImage ? (
       <img
         class="thumb__img"
-        src={heroImage}
+        src={coverImage}
         alt=""
         loading="lazy"
         decoding="async"
@@ -136,10 +193,8 @@ const rankingGuideLabel =
         {guideBadge && (
           <span class="thumb__guide-badge">{guideBadge}</span>
         )}
-        <div class="thumb__guide-stack">
-          <span class="thumb__guide-icon" aria-hidden="true" />
-          <span class="thumb__guide-label">{guideKicker}</span>
-        </div>
+        <span class="thumb__guide-icon" aria-hidden="true" />
+        <span class="thumb__guide-label">{guideKicker}</span>
       </div>
     )
   }

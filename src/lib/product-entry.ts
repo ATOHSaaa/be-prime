@@ -5,6 +5,8 @@ export interface ProductEntry {
   price?: string;
   referencePrice?: string;
   savings?: string;
+  /** ASIN の P/ 画像が使えない場合の商品画像URL */
+  imageUrl?: string;
 }
 
 export function findProductEntry(

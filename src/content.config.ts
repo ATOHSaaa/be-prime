@@ -17,7 +17,22 @@ const posts = defineCollection({
     /** 記事サムネイル・OGP。未指定時はカテゴリ別プレースホルダー */
     heroImage: z.string().optional(),
     ogImage: z.string().optional(),
+    /** サムネイル・OGP用ASIN（1件）。複数ある場合は thumbnailAsins を使う */
+    thumbnailAsin: z
+      .string()
+      .regex(/^[A-Z0-9]{10}$/i)
+      .optional(),
+    /** サムネイル用ASIN（2件以上で大きい表示はモザイクになる） */
+    thumbnailAsins: z
+      .array(z.string().regex(/^[A-Z0-9]{10}$/i))
+      .optional(),
+    /** ブランドサムネイル（配信記事など。ASIN不要） */
+    thumbnailBrand: z.enum(['prime-video']).optional(),
+    /** ブランドサムネイル左上の小バッジ（例: TBSドラマ） */
+    thumbnailBrandBadge: z.string().optional(),
     cta: z.enum(['prime-trial', 'prime-day', 'sale-page', 'none']).optional(),
+    /** true のとき目次直上の商品カード一覧を出さない（本文中の ::product:: のみ表示） */
+    hideHeaderProductCards: z.boolean().optional(),
     products: z
       .array(
         z.object({
@@ -27,6 +42,7 @@ const posts = defineCollection({
           price: z.string().optional(),
           referencePrice: z.string().optional(),
           savings: z.string().optional(),
+          imageUrl: z.string().url().optional(),
         }),
       )
       .optional(),

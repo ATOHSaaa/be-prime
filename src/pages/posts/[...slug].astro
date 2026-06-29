@@ -5,8 +5,9 @@ import { fetchProductsByAsins } from '@/lib/creators-api';
 import { resolveProducts } from '@/lib/product-entries';
 import { getPublishedPosts } from '@/lib/posts';
 import {
+  buildProductImageMap,
   getPostOgImage,
-  productImageMapFromApi,
+  getPostThumbnailAsins,
   resolvePostThumbnail,
 } from '@/lib/post-thumbnail';
 
@@ -33,16 +34,17 @@ const { Content } = await render(post);
 const allPosts = await getPublishedPosts();
 
 const productEntries = post.data.products ?? [];
+const thumbnailAsins = [
+  ...getPostThumbnailAsins(post),
+  ...productEntries.map((p) => p.asin),
+];
 const apiProducts =
-  productEntries.length > 0
-    ? await fetchProductsByAsins(productEntries.map((p) => p.asin))
+  thumbnailAsins.length > 0
+    ? await fetchProductsByAsins(thumbnailAsins)
     : [];
 const amazonProducts = resolveProducts(productEntries, apiProducts);
 
-const imageByAsin = productImageMapFromApi(
-  productEntries.map((p) => p.asin),
-  apiProducts,
-);
+const imageByAsin = await buildProductImageMap(thumbnailAsins);
 const postThumbnail = resolvePostThumbnail(post, imageByAsin);
 const ogImage = getPostOgImage(post, postThumbnail);
 ---
@@ -53,7 +55,6 @@ const ogImage = getPostOgImage(post, postThumbnail);
   headings={headings}
   amazonProducts={amazonProducts}
   productEntries={productEntries}
-  postThumbnail={postThumbnail}
   ogImage={ogImage}
 >
   <Content />

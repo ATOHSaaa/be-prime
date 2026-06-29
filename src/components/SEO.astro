@@ -27,7 +27,12 @@ const {
   noindex = false,
 } = Astro.props;
 
-const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
+const fullTitle =
+  title === site.name
+    ? title
+    : title.startsWith(`${site.name} | `)
+      ? title
+      : `${title} | ${site.name}`;
 const url = canonicalUrl(pathname);
 const image = absoluteImageUrl(ogImage ?? '/og-default.png');
 ---

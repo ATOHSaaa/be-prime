@@ -1,6 +1,6 @@
 ---
 title: 'ASINとは？Amazon商品の識別番号の見方と使い道'
-description: 'AmazonのASIN（商品識別番号）の意味、商品ページでの確認方法、型番やJANコードとの違いを解説。セール時に買い間違いを防ぐための使い方を整理します。'
+description: 'AmazonのASIN（商品識別番号）の意味、商品ページでの確認方法、型番やJANコードとの違いを解説。セール時に買い間違いを防ぐための使い方について解説します。'
 pubDate: 2026-06-25
 category: deals
 tags: [ASIN, Amazon, 買い時, セール, お得情報]

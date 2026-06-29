@@ -1,13 +1,13 @@
 ---
 title: 'Keepa（キーパ）の使い方｜Amazon価格推移で買い時を見極める'
-description: 'Amazon価格推移ツールKeepaの基本機能とグラフの見方を解説。セール価格が本当にお得か、過去の値下げタイミングを確認する方法を整理します。'
+description: 'Amazon価格推移ツールKeepaの基本機能とグラフの見方を解説。セール価格が本当にお得か、過去の値下げタイミングを確認する方法について解説します。'
 pubDate: 2026-06-25
 category: deals
 tags: [Keepa, 価格推移, 買い時, セール, お得情報]
 cta: sale-page
 ---
 
-Amazonのセールで「<strong>20%OFF</strong>」と表示されていても、**過去にさらに安かった時期がある**ことは珍しくありません。買う前に価格の推移を確認したい人向けに、**[Keepa](https://keepa.com/#!language/5)**（キーパ）というAmazon価格トラッカーの使い方を整理します。Be Primeではセール情報を速報していますが、**最終的な買い時判断はAmazon.co.jpの表示と、必要ならKeepaのグラフをあわせて確認する**のがおすすめです。
+Amazonのセールで「<strong>20%OFF</strong>」と表示されていても、**過去にさらに安かった時期がある**ことは珍しくありません。買う前に価格の推移を確認したい人向けに、**[Keepa](https://keepa.com/#!language/5)**（キーパ）というAmazon価格トラッカーの使い方について解説します。Be Primeではセール情報を速報していますが、**最終的な買い時判断はAmazon.co.jpの表示と、必要ならKeepaのグラフをあわせて確認する**のがおすすめです。
 
 ## Keepaとは
 

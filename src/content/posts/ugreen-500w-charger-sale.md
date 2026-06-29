@@ -1,6 +1,6 @@
 ---
 title: 'UGREEN 500W充電器が22,784円（24%OFF）｜単ポート240W・6台同時充電'
-description: 'UGREEN 500W卓上充電器（X759）が定価29,980円から24%OFFの22,784円になっています。スペックや買い方の見方などについて整理します。'
+description: 'UGREEN 500W卓上充電器（X759）が定価29,980円から24%OFFの22,784円になっています。スペックや買い方の見方などについて解説します。'
 pubDate: 2026-06-23
 updatedDate: 2026-06-23
 category: gadget
@@ -11,6 +11,7 @@ cta: sale-page
 products:
   - asin: B0DL9MHFJJ
     label: UGREEN 500W 充電器 X759
+    imageUrl: https://m.media-amazon.com/images/I/713u9WoQenL._AC_SL800_.jpg
     price: '22,784円'
     referencePrice: '29,980円'
     savings: '24%OFF'

@@ -527,14 +527,6 @@ a.site-nav-control:hover {
   margin-bottom: 0.5rem;
 }
 
-.article-product-thumb {
-  margin: 0 0 var(--space-lg);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 2px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
-}
-
 .toc {
   background: var(--color-surface);
   border: 2px solid var(--color-border);
@@ -1331,6 +1323,158 @@ main {
   display: block;
 }
 
+/* 複数ASINのモザイクサムネ（大きい表示用） */
+.thumb__mosaic {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 3px;
+  background: #1a1a2e;
+}
+
+.thumb__mosaic-item {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  background: #2a2a3e;
+}
+
+.thumb__mosaic--2 {
+  grid-template-rows: 1fr;
+}
+
+.thumb__mosaic--3 .thumb__mosaic-item:last-child {
+  grid-column: 1 / -1;
+}
+
+/* ブランドサムネイル（Prime Video など） */
+.thumb__brand {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 115%, rgba(0, 168, 225, 0.28), transparent 68%),
+    linear-gradient(155deg, #04041a 0%, #0a0a37 42%, #10104a 100%);
+}
+
+.thumb__brand-glow {
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  width: 70%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 168, 225, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.thumb__brand-stack {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.thumb__brand-play {
+  position: relative;
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: 50%;
+  background: rgba(0, 168, 225, 0.12);
+  border: 2px solid rgba(0, 168, 225, 0.45);
+  box-shadow:
+    0 0 0 6px rgba(0, 168, 225, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.thumb__brand-play::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 11px;
+  border-color: transparent transparent transparent #00a8e1;
+}
+
+.thumb__brand-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.28em;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+.thumb__brand-logo-prime {
+  font-size: clamp(0.95rem, 3.2vw, 1.15rem);
+  color: #fff;
+}
+
+.thumb__brand-logo-video {
+  font-size: clamp(0.95rem, 3.2vw, 1.15rem);
+  color: #00a8e1;
+}
+
+.thumb__brand-badge {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
+  z-index: 2;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  color: #fff;
+  background: rgba(0, 168, 225, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.thumb__brand--compact {
+  position: relative;
+  inset: auto;
+  padding: 0.35rem 0.5rem;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% 120%, rgba(0, 168, 225, 0.22), transparent),
+    linear-gradient(155deg, #04041a 0%, #0a0a37 100%);
+}
+
+.thumb__brand--compact .thumb__brand-logo-prime,
+.thumb__brand--compact .thumb__brand-logo-video {
+  font-size: 0.62rem;
+}
+
+.thumb--brand {
+  background: #0a0a37;
+}
+
+.thumb--ranking .thumb__brand--compact {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* 商品記事サムネイル */
 .thumb__product {
   position: absolute;
@@ -1491,21 +1635,6 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.thumb__ranking-off {
-  position: absolute;
-  top: 0.15rem;
-  right: 0.15rem;
-  z-index: 1;
-  padding: 0.08rem 0.28rem;
-  font-size: 0.46rem;
-  font-weight: 900;
-  line-height: 1.2;
-  color: #fff;
-  background: var(--color-accent);
-  border-radius: 999px;
-  box-shadow: 0 2px 4px rgba(255, 43, 61, 0.3);
 }
 
 .thumb__ranking--guide {
@@ -1688,10 +1817,12 @@ main {
 .thumb__guide {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: center;
+  justify-items: center;
+  row-gap: 0.4rem;
+  padding: 0.85rem 0.65rem;
   overflow: hidden;
   background-color: #f8f7f4;
   background-image: radial-gradient(
@@ -1742,19 +1873,11 @@ main {
   background-size: 14px 14px, 100% 100%;
 }
 
-.thumb__guide-stack {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.55rem;
-}
-
 .thumb__guide-icon {
   position: relative;
-  width: 2.6rem;
-  height: 3.15rem;
+  grid-row: 1;
+  width: 2.2rem;
+  height: 2.65rem;
   border: 2px solid rgba(10, 10, 55, 0.12);
   border-radius: 0.4rem;
   background: rgba(255, 255, 255, 0.88);
@@ -1764,16 +1887,16 @@ main {
 .thumb__guide-icon::before {
   content: '';
   position: absolute;
-  top: 0.55rem;
-  left: 0.42rem;
-  right: 0.42rem;
+  top: 0.45rem;
+  left: 0.36rem;
+  right: 0.36rem;
   height: 2px;
   border-radius: 1px;
   background: rgba(10, 10, 55, 0.22);
   box-shadow:
-    0 0.42rem 0 rgba(10, 10, 55, 0.18),
-    0 0.84rem 0 rgba(10, 10, 55, 0.14),
-    0 1.26rem 0 rgba(10, 10, 55, 0.1);
+    0 0.36rem 0 rgba(10, 10, 55, 0.18),
+    0 0.72rem 0 rgba(10, 10, 55, 0.14),
+    0 1.08rem 0 rgba(10, 10, 55, 0.1);
 }
 
 .thumb__guide--deals .thumb__guide-icon {
@@ -1822,6 +1945,9 @@ main {
 }
 
 .thumb__guide-label {
+  grid-row: 2;
+  position: relative;
+  z-index: 1;
   padding: 0.35rem 0.7rem;
   font-size: 0.72rem;
   font-weight: 800;
@@ -1898,11 +2024,8 @@ main {
 }
 
 .thumb--compact .thumb__guide {
-  padding: 0.4rem;
-}
-
-.thumb--compact .thumb__guide-stack {
-  gap: 0.3rem;
+  padding: 0.45rem 0.4rem;
+  row-gap: 0.3rem;
 }
 
 .thumb--compact .thumb__guide-icon {
@@ -1934,6 +2057,53 @@ main {
   right: 0.25rem;
   font-size: 0.48rem;
   padding: 0.1rem 0.28rem;
+}
+
+/* カード・ヒーロー脇など小さいサムネ */
+.hero-side .thumb__guide,
+.home-card__thumb-wrap .thumb__guide,
+.post-card__thumb .thumb__guide {
+  padding: 0.55rem 0.45rem 0.5rem;
+  row-gap: 0.32rem;
+}
+
+.hero-side .thumb__guide-icon,
+.home-card__thumb-wrap .thumb__guide-icon,
+.post-card__thumb .thumb__guide-icon {
+  width: 1.75rem;
+  height: 2.1rem;
+  border-width: 1.5px;
+  border-radius: 0.28rem;
+  box-shadow: 0 3px 8px rgba(10, 10, 55, 0.06);
+}
+
+.hero-side .thumb__guide-icon::before,
+.home-card__thumb-wrap .thumb__guide-icon::before,
+.post-card__thumb .thumb__guide-icon::before {
+  top: 0.38rem;
+  left: 0.3rem;
+  right: 0.3rem;
+  height: 1.5px;
+  box-shadow:
+    0 0.3rem 0 rgba(10, 10, 55, 0.18),
+    0 0.6rem 0 rgba(10, 10, 55, 0.14),
+    0 0.9rem 0 rgba(10, 10, 55, 0.1);
+}
+
+.hero-side .thumb__guide-label,
+.home-card__thumb-wrap .thumb__guide-label,
+.post-card__thumb .thumb__guide-label {
+  font-size: 0.58rem;
+  padding: 0.22rem 0.42rem;
+}
+
+.hero-side .thumb__guide-badge,
+.home-card__thumb-wrap .thumb__guide-badge,
+.post-card__thumb .thumb__guide-badge {
+  top: 0.28rem;
+  right: 0.28rem;
+  font-size: 0.5rem;
+  padding: 0.12rem 0.3rem;
 }
 
 /* 旧プレースホルダー用（削除済みマーク） */
@@ -2252,20 +2422,6 @@ main {
   text-transform: uppercase;
   padding-bottom: 0.45rem;
   border-bottom: 2px solid var(--color-text);
-}
-
-.home-ranking__tab {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.65rem;
-  font-weight: 800;
-  margin: 0 0 0.65rem;
-  padding: 0.22rem 0.55rem;
-  color: var(--color-accent);
-  background: rgba(255, 43, 61, 0.08);
-  border: 1px solid rgba(255, 43, 61, 0.15);
-  border-radius: 999px;
-  letter-spacing: 0.04em;
 }
 
 .home-ranking__list {
